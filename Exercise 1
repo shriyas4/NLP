@@ -1,0 +1,57 @@
+# 1.	Tokenize the sentence into words for the further analysis (using Python Function)
+import nltk
+#nltk.download('punkt')
+data = "This is a Demo Text for NLP using NLTK. Full form of NLTK is Natural Language Toolkit"
+word_tokens = nltk.word_tokenize(data)
+print(word_tokens)
+
+#2.	Normalize the sentence to eliminate the unwanted punctuation, converting into lower case or upper case of the entire document, expanding abbreviation, numbers into words and canonicalization.
+#(i) convert text to lower case:
+import nltk
+text = "This is a Demo Text for NLP using NLTK Full form of NLTK is Natural Language Toolkit"
+lower_text = text.lower()
+print (lower_text)
+
+#(ii) convert text to upper case:
+
+import nltk
+text = "This is a Demo Text for NLP using NLTK Full form of NLTK is Natural Language Toolkit"
+lower_text = text.upper()
+print (lower_text)
+
+#(iii) eliminate the unwanted punctuation
+import nltk
+import re
+tokenizer = nltk.RegexpTokenizer(r'\w+')
+tokenizer.tokenize('Eighty-seven miles to go, yet.  Onward!')
+text = "This is a Demo Text for NLP. It's done using NLTK. Full form of NLTK is: Natural Language Toolkit" 
+ptext = re.sub(r'[^\w\s]','',text)
+print('String with Punctuation: ', text)
+print('String without Punctuation: ', ptext)
+
+#Stopwords.
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+print(stopwords.words('english'))
+
+from nltk.tokenize import word_tokenize
+  
+example_sent = """This is a sample sentence,
+                  showing off the stop words filtration."""
+  
+stop_words = set(stopwords.words('english'))
+  
+word_tokens = word_tokenize(example_sent)
+# converts the words in word_tokens to lower case and then checks whether 
+#they are present in stop_words or not
+filtered_sentence = [w for w in word_tokens if not w.lower() in stop_words]
+#with no lower case conversion
+filtered_sentence = []
+  
+for w in word_tokens:
+    if w not in stop_words:
+        filtered_sentence.append(w)
+  
+print(word_tokens)
+print(filtered_sentence)
