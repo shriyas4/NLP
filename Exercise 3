@@ -77,3 +77,5 @@ plt.bar(df['Age'], df['Sales'])
 plt.xlabel("Age") 
 plt.ylabel("Sales") 
 plt.show()
+
+#3. Get the word cloud for the given data
