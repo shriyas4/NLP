@@ -1,0 +1,23 @@
+import numpy as np
+import pandas as pd
+
+pd.options.display.max_colwidth=100
+train_data=pd.read_csv("train.csv",encoding='ISO-8859-1')
+train_data
+
+rand_indexs = np.random.randint(1,len(train_data),30).tolist()
+train_data["text"][rand_indexs]
+
+import re
+tweets_text=train_data.text.str.cat()
+emos=set(re.findall(r"([xX:;][-'']?.)",tweets_text))
+emos_count=[]
+for emo in emos:
+        emos_count.append((tweets_text.count(emo),emo))
+sorted(emos_count,reverse=True)
+
+
+HAPPY_EMO=r"([xX;:]-?[dD)|:-?[\)]]|[;:][pP])"
+SAD_EMO=r"(:'?[/|\(])"
+print("Happy emoticons",set(re.findall(HAPPY_EMO,tweets_text)))
+print("Sad emoticons",set(re.findall(SAD_EMO,tweets_text)))
