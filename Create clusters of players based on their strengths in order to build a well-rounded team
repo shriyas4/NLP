@@ -1,0 +1,53 @@
+import pandas as pd
+import numpy as np
+import  seaborn as sns
+runs=pd.read_csv(r"Ball_by_Ball.csv")
+runs.head()
+
+Players=pd.read_csv(r'player.csv')
+Players=Players.drop(["Is_Umpire","Unnamed: 7"],axis=1)
+Players.head()
+
+runs=runs[["Match_Id","Over_Id","Striker_Id","Bowler_Id","Batsman_Scored","Extra_Runs"]]
+runs.head()
+
+runs.isnull().sum()
+
+runs["Extra_Runs"]=pd.to_numeric(runs["Extra_Runs"], errors="coerce")
+runs["Extra_Runs"]=runs["Extra_Runs"].fillna(0)
+runs["Batsman_Scored"]=pd.to_numeric(runs["Batsman_Scored"],errors="coerce")
+runs["Batsman_Scored"]=runs["Batsman_Scored"].fillna(0)
+runs.head(14)
+
+A=[]
+B=[]
+
+for i in runs["Striker_Id"].unique():
+    a=runs["Batsman_Scored"][runs["Striker_Id"]==i].sum()
+    b=runs["Match_Id"][runs["Striker_Id"]==i].count()
+    A.append(a)
+    B.append(b)
+    
+Batsmen=pd.DataFrame({"Players_names":runs["Striker_Id"].unique()})
+Batsmen["Runs"]=A
+Batsmen["Balls_played"]=B
+Batsmen["Strike_Rate"]=(Batsmen["Runs"]*100/Batsmen["Balls_played"]).round(2)
+Batsmen["Strike_Rate"].hist(color="pink")
+
+Batsmen=Batsmen[Batsmen["Strike_Rate"]>60]
+Batsmen=Batsmen[Batsmen["Strike_Rate"]<150]
+Batsmen=Batsmen[(Batsmen["Runs"]*6/Batsmen["Balls_played"])>6]
+Batsmen.head()
+
+Batsmen["Strike_Rate"].hist(color="pink")
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+sns.set_style("whitegrid")
+fig = plt.figure(figsize=(12,6))
+plt.scatter(Batsmen["Strike_Rate"], Batsmen["Runs"], color="red")
+plt.xlabel("Strike Rate of the Batsmen", fontsize=14)
+plt.ylabel("Runs scored by the Batsmen", fontsize=14)
+plt.title("IPL Batsmen", fontsize=16)
+plt.show()
