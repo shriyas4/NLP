@@ -1,2 +1,71 @@
 #Write python program for Classify the spam mail by using Logistic Regression  
 
+  # Ignoring unnecessory warnings
+import warnings
+warnings.filterwarnings("ignore")  
+# Specialized container datatypes
+import collections
+# For data vizualization 
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+%matplotlib inline
+import seaborn as sns
+# For large and multi-dimensional arrays
+import numpy as np
+# For data manipulation and analysis
+import pandas as pd
+# Natural language processing library
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer 
+from nltk.stem import SnowballStemmer
+from nltk.tokenize import word_tokenize
+from nltk.util import ngrams
+# For basic cleaning and data preprocessing 
+import re
+import string 
+# Machine learning libary
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import precision_recall_fscore_support as score
+from sklearn.model_selection import GridSearchCV
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import MultinomialNB
+# For wordcloud generating 
+from wordcloud import WordCloud
+df = pd.read_csv(r"spam.csv", encoding='latin1')
+df.info()
+
+df.columns
+
+df.head()
+
+df.drop(['Unnamed: 2','Unnamed: 3','Unnamed: 4'], axis=1, inplace=True)
+df.rename(columns = {'v1':'label','v2':'message'}, inplace=True)
+df.dropna(inplace=True)
+df.head()
+
+df['label'].value_counts().plot(kind = 'barh', color = ['blue','red'], figsize = (8, 6))
+plt.title('Horizontal Bar Chart for Data Distribution', fontsize = 20)
+plt.ylabel('Spam vs Ham')
+plt.xlabel('Number of messages')
+plt.show()
+
+df.groupby('label').describe()
+
+cv = CountVectorizer()
+words = cv.fit_transform(df.message)
+
+sum_words = words.sum(axis=0)
+
+words_freq = [(word, sum_words[0, i]) for word, i in cv.vocabulary_.items()]
+words_freq = sorted(words_freq, key = lambda x: x[1], reverse = True)
+
+frequency = pd.DataFrame(words_freq, columns=['word', 'freq'])
+
+frequency.head(30).plot(x='word', y='freq', kind='bar', figsize=(15, 7), color = 'orange')
+plt.title("Most Frequently Occuring Words - Top 30")
+
