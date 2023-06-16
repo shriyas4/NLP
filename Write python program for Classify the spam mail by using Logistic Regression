@@ -1,4 +1,4 @@
-#Write python program for Classify the spam mail by using Logistic Regression  
+ 
 
   # Ignoring unnecessory warnings
 import warnings
